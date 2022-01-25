@@ -18,5 +18,12 @@ program.parse(process.argv)
 const json = JSON.parse(fs.readFileSync(program.input, { encoding: 'utf8' }))
 
 if (typeof json !== 'object') throw new Error('Invalid JSON')
+let maps = parseBalanceMap(json);
 
-fs.writeFileSync(program.output, JSON.stringify(parseBalanceMap(json)));
+for(let i in maps.claims){
+ fs.writeFileSync(program.output+"/"+i+".json", JSON.stringify(maps.claims[i]));
+}
+
+fs.writeFileSync(program.output+"/all.json", JSON.stringify(maps));
+maps.claims={};
+fs.writeFileSync(program.output+"/info.json", JSON.stringify(maps));

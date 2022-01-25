@@ -14,7 +14,7 @@ const json = JSON.parse(fs.readFileSync(program.input, { encoding: 'utf8' }))
 
 if (typeof json !== 'object') throw new Error('Invalid JSON')
 
-  let list = json.data.get_result_by_job_id;
+  let list = json.data.get_result_by_result_id;
   interface KV {
      [key: string]: string;
   }
@@ -23,7 +23,7 @@ if (typeof json !== 'object') throw new Error('Invalid JSON')
   let address=""
   for (let ent of list){
 	let creator=ent.data.creator.replace(/\\/,"0");
-  	kv[creator]="100";
+  	kv[creator]="5000";
 	if(ent.data.contract>num){
 	num= ent.data.contract
 	address=creator

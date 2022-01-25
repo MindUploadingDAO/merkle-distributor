@@ -8,10 +8,13 @@ import "./interfaces/IMerkleDistributor.sol";
 contract MerkleDistributor is IMerkleDistributor {
     address public immutable override token;
     bytes32 public immutable override merkleRoot;
-
-    // This is a packed array of booleans.
+    
+    uint public forCreatorBalance = 250*10**8;//Rewarded to Ethereum contract creators,100000 per address.
+    uint public forUserBalance = 250*10**8;//Rewards to Ethereum users,first come first served.
+    uint public forUserPerAddress = 2000;
+ 
     mapping(uint256 => uint256) private claimedBitMap;
-
+    mapping(address => bool) private claimed;
     constructor(address token_, bytes32 merkleRoot_) public {
         token = token_;
         merkleRoot = merkleRoot_;
@@ -30,7 +33,7 @@ contract MerkleDistributor is IMerkleDistributor {
         uint256 claimedBitIndex = index % 256;
         claimedBitMap[claimedWordIndex] = claimedBitMap[claimedWordIndex] | (1 << claimedBitIndex);
     }
-
+    
     function claim(uint256 index, address account, uint256 amount, bytes32[] calldata merkleProof) external override {
         require(!isClaimed(index), 'MerkleDistributor: Drop already claimed.');
 
@@ -44,4 +47,14 @@ contract MerkleDistributor is IMerkleDistributor {
 
         emit Claimed(index, account, amount);
     }
+    
+    function claim() external override {
+        require(!claimed[msg.sender], 'MerkleDistributor: Drop already claimed.');
+	require(forUserBalance > 0, 'MerkleDistributor: Distribution closed.');
+        require(IERC20(token).transfer(msg.sender, forUserPerAddress), 'MerkleDistributor: Transfer failed.');
+        claimed[msg.sender]=true;
+        forUserBalance = forUserBalance-forUserPerAddress;
+        emit Claimed(0, msg.sender, forUserPerAddress);
+    }
+    
 }

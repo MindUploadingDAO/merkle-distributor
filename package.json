@@ -41,9 +41,9 @@
     "compile": "waffle",
     "pretest": "yarn compile",
     "test": "mocha",
-    "to-kv":"ts-node scripts/to-kv.ts --input scripts/graphql.json --output scripts/example.json",
+    "to-kv":"ts-node scripts/to-kv.ts --input scripts/graphql.json --output scripts/result/example.json",
     "generate-merkle-root": "ts-node scripts/generate-merkle-root.ts",
-    "generate-merkle-root:example": "ts-node scripts/generate-merkle-root.ts --input scripts/example.json -o scripts/result.json",
+    "generate-merkle-root:example": "ts-node scripts/generate-merkle-root.ts --input scripts/example.json -o scripts/result",
     "prepublishOnly": "yarn test"
   }
 }

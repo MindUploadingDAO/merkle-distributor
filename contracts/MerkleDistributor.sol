@@ -43,6 +43,7 @@ contract MerkleDistributor is IMerkleDistributor {
 
         // Mark it claimed and send the token.
         _setClaimed(index);
+        claimed[msg.sender]=true;
         require(IERC20(token).transfer(account, amount), 'MerkleDistributor: Transfer failed.');
 
         emit Claimed(index, account, amount);
@@ -50,10 +51,11 @@ contract MerkleDistributor is IMerkleDistributor {
     
     function claim() external override {
         require(!claimed[msg.sender], 'MerkleDistributor: Drop already claimed.');
-	require(forUserBalance > 0, 'MerkleDistributor: Distribution closed.');
-        require(IERC20(token).transfer(msg.sender, forUserPerAddress), 'MerkleDistributor: Transfer failed.');
+        require(forUserBalance > 0, 'MerkleDistributor: Distribution closed.');
+        
         claimed[msg.sender]=true;
         forUserBalance = forUserBalance-forUserPerAddress;
+        require(IERC20(token).transfer(msg.sender, forUserPerAddress), 'MerkleDistributor: Transfer failed.');
         emit Claimed(0, msg.sender, forUserPerAddress);
     }
     

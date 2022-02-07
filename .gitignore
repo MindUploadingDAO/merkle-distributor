@@ -1,3 +1,4 @@
+scripts/result/
 node_modules/
 build/
 wrangler.toml

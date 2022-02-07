@@ -23,7 +23,7 @@ if (typeof json !== 'object') throw new Error('Invalid JSON')
   let address=""
   for (let ent of list){
 	let creator=ent.data.creator.replace(/\\/,"0");
-  	kv[creator]="5000";
+  	kv[creator]="413";
 	if(ent.data.contract>num){
 	num= ent.data.contract
 	address=creator
